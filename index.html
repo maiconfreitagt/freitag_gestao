@@ -78,13 +78,65 @@ document.querySelectorAll(".screen").forEach(e=>e.classList.remove("active"));
 document.getElementById(x).classList.add("active");
 scrollTo(0,0);
 }
-function book(){
-let n=document.getElementById("n").value.trim()||"Cliente Demo";
-let t=document.getElementById("t").value;
-let s=document.getElementById("s").value.split(" — ")[0];
-document.getElementById("msg").innerHTML='<div class="ok">✓ Agendamento confirmado para <b>'+n+'</b> às <b>'+t+'</b>.</div>';
-document.getElementById("agenda").innerHTML+='<tr><td>'+t+'</td><td>'+n+'</td><td>'+s+'</td><td><span class="pill">Novo</span></td></tr>';
-document.getElementById("count").textContent=+document.getElementById("count").textContent+1;
-}
+async function book(){
+  const nome = document.getElementById("n").value.trim();
+  const telefone = document.getElementById("w").value.trim();
+  const data = document.getElementById("d").value;
+  const horario = document.getElementById("t").value;
+  const servicoCompleto = document.getElementById("s").value;
+
+  const profissionalEl = document.getElementById("p");
+  const profissional = profissionalEl ? profissionalEl.value : "";
+
+  const servico = servicoCompleto.split("—")[0].trim();
+
+  if(!nome || !telefone || !data || !horario){
+    document.getElementById("msg").innerHTML =
+      "<div class='notice'>⚠️ Preencha todos os campos.</div>";
+    return;
+  }
+
+  const SUPABASE_URL = "https://jhnucvynknltahppairt.supabase.co";
+const SUPABASE_KEY = "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O";
+  try {
+    const resposta = await fetch(
+      SUPABASE_URL + "/rest/v1/agendamentos",
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=representation"
+        },
+        body: JSON.stringify({
+          cliente: nome,
+          telefone: telefone,
+          servico: servico,
+          profissional: profissional,
+          date: data,
+          horario: horario,
+          status: "confirmado"
+        })
+      }
+    );
+
+    if(!resposta.ok){
+      const erro = await resposta.text();
+      console.error(erro);
+      throw new Error("Erro ao salvar agendamento");
+    }
+
+    document.getElementById("msg").innerHTML =
+      "<div class='notice'>✓ Agendamento confirmado para <b>" +
+      nome + "</b> às <b>" + horario + "</b>.</div>";
+
+  } catch(erro) {
+    console.error(erro);
+
+    document.getElementById("msg").innerHTML =
+      "<div class='notice'>❌ Não foi possível salvar o agendamento.</div>";
+  }
+  }
 </script>
 </body></html>
