@@ -124,7 +124,7 @@ const SUPABASE_KEY = "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O";
     if(!resposta.ok){
       const erro = await resposta.text();
       console.error(erro);
-      throw new Error("Erro ao salvar agendamento");
+      throw new Error(erro);
     }
 
     document.getElementById("msg").innerHTML =
@@ -133,7 +133,7 @@ const SUPABASE_KEY = "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O";
 
   } catch(erro) {
     console.error(erro);
-
+alert(erro.message);
     document.getElementById("msg").innerHTML =
       "<div class='notice'>❌ Não foi possível salvar o agendamento.</div>";
   }
