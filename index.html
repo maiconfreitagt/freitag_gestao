@@ -64,8 +64,7 @@ table{width:100%;border-collapse:collapse}td,th{padding:12px 8px;text-align:left
 <div class="card metric l">Saldo<b>R$ 4.710</b></div>
 </div>
 <div class="section card"><h2>Agenda de hoje</h2><table><thead><tr><th>Hora</th><th>Cliente</th><th>Serviço</th><th>Status</th></tr></thead><tbody id="agenda">
-<tr><td>09:00</td><td>Carlos</td><td>Corte</td><td><span class="pill">Confirmado</span></td></tr>
-<tr><td>10:30</td><td>Rafael</td><td>Corte + Barba</td><td><span class="pill">Confirmado</span></td></tr>
+<tr><td colspan="4">Carregando agenda...</td></tr>
 </tbody></table></div>
 </section>
 
@@ -78,7 +77,46 @@ document.querySelectorAll(".screen").forEach(e=>e.classList.remove("active"));
 document.getElementById(x).classList.add("active");
 scrollTo(0,0);
 }
-async function book(){
+async function carregarAgenda(){
+  const tbody = document.getElementById("agenda");
+  const contador = document.getElementById("count");
+  const agora = new Date();
+  const hoje = agora.getFullYear() + "-" +
+    String(agora.getMonth()+1).padStart(2,"0") + "-" +
+    String(agora.getDate()).padStart(2,"0");
+
+  const url = "https://jhnucvynknltahppairt.supabase.co/rest/v1/agendamentos?select=cliente,servico,horario,status&date=eq." + hoje + "&order=horario.asc";
+
+  try {
+    const resposta = await fetch(url, {
+      headers: {
+        "apikey": "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O"
+      }
+    });
+
+    if (!resposta.ok) throw new Error(await resposta.text());
+
+    const lista = await resposta.json();
+    if (contador) contador.textContent = lista.length;
+
+    const seguro = valor => String(valor || "").replace(/[&<>"']/g, c => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    }[c]));
+
+    tbody.innerHTML = lista.length
+      ? lista.map(a => "<tr><td>" + seguro(a.horario) +
+        "</td><td>" + seguro(a.cliente) +
+        "</td><td>" + seguro(a.servico) +
+        "</td><td><span class='pill'>" + seguro(a.status || "Confirmado") +
+        "</span></td></tr>").join("")
+      : "<tr><td colspan='4'>Nenhum agendamento hoje</td></tr>";
+  } catch (erro) {
+    console.error(erro);
+    tbody.innerHTML = "<tr><td colspan='4'>Não foi possível carregar a agenda</td></tr>";
+  }
+}
+
+carregarAgenda();async function book(){
   const nome = document.getElementById("n").value.trim();
   const telefone = document.getElementById("phone").value.trim();
   const data = document.getElementById("d").value;
