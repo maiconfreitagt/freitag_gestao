@@ -80,7 +80,7 @@ scrollTo(0,0);
 }
 async function book(){
   const nome = document.getElementById("n").value.trim();
-  const telefone = document.getElementById("w").value.trim();
+  const telefone = document.getElementById("phone").value.trim();
   const data = document.getElementById("d").value;
   const horario = document.getElementById("t").value;
   const servicoCompleto = document.getElementById("s").value;
@@ -114,7 +114,7 @@ const SUPABASE_KEY = "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O";
           telefone: telefone,
           servico: servico,
           profissional: profissional,
-          date: data,
+          data: data,
           horario: horario,
           status: "confirmado"
         })
