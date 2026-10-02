@@ -49,15 +49,15 @@ table{width:100%;border-collapse:collapse}td,th{padding:12px 8px;text-align:left
 <section id="login" class="screen">
 <div class="nav"><button class="btn dark" onclick="go('home')">← Voltar</button></div>
 <div class="card login"><div class="eyebrow" style="color:#a778ff">ÁREA DA EMPRESA</div><h2>Freitag Gestão</h2><p class="muted">Acesso demonstrativo ao painel administrativo.</p>
-<label>E-mail<input value="demo@freitaggestao.com"></label><br>
-<label>Senha<input type="password" value="123456"></label><br><br>
-<button class="btn violet" onclick="go('dash')">ENTRAR NA DEMO</button></div>
+<label>E-mail<input id="adminEmail" type="email" placeholder="Seu e-mail"></label><br>
+<label>Senha<input id="adminPassword" type="password" placeholder="Sua senha"></label><br><br>
+<button class="btn violet" onclick="entrar()">ENTRAR NA DEMO</button></div>
 </section>
 
 <section id="dash" class="screen">
-<div class="nav"><button class="btn dark" onclick="go('home')">Sair</button><button class="btn" onclick="go('client')">Página do cliente</button></div>
+<div class="nav"><button class="btn dark" onclick="sair()">Sair</button><button class="btn" onclick="go('client')">Página do cliente</button></div>
 <div class="section"><div class="eyebrow" style="color:#a778ff">PAINEL ADMINISTRATIVO</div><h1>Barbearia Imperial</h1><p class="muted">Visão geral do negócio • demonstração</p></div>
-<div class="dash">
+<div class="dash"
 <div class="card metric v">Agendamentos hoje<b id="count">8</b></div>
 <div class="card metric l">Receita do mês<b>R$ 6.840</b></div>
 <div class="card metric">Despesas<b>R$ 2.130</b></div>
@@ -77,6 +77,32 @@ document.querySelectorAll(".screen").forEach(e=>e.classList.remove("active"));
 document.getElementById(x).classList.add("active");
 scrollTo(0,0);
 }
+let accessToken = "";
+function sair(){
+  accessToken = "";
+  go("home");
+  }
+async function entrar(){
+  const email = document.getElementById("adminEmail").value.trim();
+  const senha = document.getElementById("adminPassword").value;
+  try {
+    const resposta = await fetch("https://jhnucvynknltahppairt.supabase.co/auth/v1/token?grant_type=password", {
+      method: "POST",
+      headers: {
+        "apikey": "sb_publishable_PYucvw3zy5nBXpkPTEIVkg_I2kHpz-0",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({email: email, password: senha})
+    });
+    const dados = await resposta.json();
+    if (!resposta.ok) throw new Error("E-mail ou senha incorretos.");
+    accessToken = dados.access_token;
+    go("dash");
+    await carregarAgenda();
+  } catch (erro) {
+    alert(erro.message);
+  }
+  }
 async function carregarAgenda(){
   const tbody = document.getElementById("agenda");
   const contador = document.getElementById("count");
@@ -90,7 +116,8 @@ async function carregarAgenda(){
   try {
     const resposta = await fetch(url, {
       headers: {
-        "apikey": "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O"
+        "apikey": "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O",
+    "Authorization": "Bearer " + accessToken
       }
     });
 
@@ -116,7 +143,7 @@ async function carregarAgenda(){
   }
 }
 
-carregarAgenda();async function book(){
+async function book(){
   const nome = document.getElementById("n").value.trim();
   const telefone = document.getElementById("phone").value.trim();
   const data = document.getElementById("d").value;
