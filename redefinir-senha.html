@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Redefinir senha — Freitag Gestão</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
+      padding: 24px; background: #121212; color: #f3f3f3;
+      font: 16px Arial, sans-serif;
+    }
+    main {
+      width: 100%; max-width: 420px; padding: 28px;
+      background: #191919; border: 1px solid #333; border-radius: 16px;
+    }
+    h1 { margin-top: 0; }
+    p { color: #bbb; line-height: 1.5; }
+    label { display: block; margin: 18px 0 7px; }
+    input, button {
+      width: 100%; padding: 14px; border-radius: 10px; font-size: 16px;
+    }
+    input { color: white; background: #101010; border: 1px solid #444; }
+    button {
+      margin-top: 20px; color: white; background: #a778ff;
+      border: 0; font-weight: bold;
+    }
+    #aviso { overflow-wrap: anywhere; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <main>
+    <h1>Criar nova senha</h1>
+    <p>Digite sua nova senha duas vezes.</p>
+
+    <form id="formulario" hidden>
+      <label for="senha">Nova senha</label>
+      <input id="senha" type="password" minlength="6" required autocomplete="new-password">
+
+      <label for="confirmacao">Digite a senha novamente</label>
+      <input id="confirmacao" type="password" minlength="6" required autocomplete="new-password">
+
+      <button id="botao" type="submit">Salvar nova senha</button>
+    </form>
+
+    <p id="aviso">Verificando o link de recuperação…</p>
+  </main>
+
+  <script>
+    const URL_SUPABASE = "https://jhnucvynknltahppairt.supabase.co";
+    const formulario = document.getElementById("formulario");
+    const aviso = document.getElementById("aviso");
+    const botao = document.getElementById("botao");
+    let supabase;
+
+    async function iniciar() {
+      try {
+        const resposta = await fetch("./index.html", { cache: "no-store" });
+        const codigo = await resposta.text();
+        const chave = codigo.match(/sb_publishable_[A-Za-z0-9_-]+/);
+
+        if (!resposta.ok || !chave) {
+          throw new Error("Não consegui localizar a configuração do site.");
+        }
+
+        supabase = window.supabase.createClient(URL_SUPABASE, chave[0]);
+        const { data, error } = await supabase.auth.getSession();
+
+        if (error) throw error;
+        if (!data.session) {
+          throw new Error("O link expirou ou já foi usado. Será preciso pedir outro e-mail.");
+        }
+
+        history.replaceState({}, document.title, location.pathname);
+        formulario.hidden = false;
+        aviso.textContent = "";
+      } catch (erro) {
+        aviso.textContent = erro.message || "Não foi possível verificar o link.";
+      }
+    }
+
+    formulario.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+
+      const senha = document.getElementById("senha").value;
+      const confirmacao = document.getElementById("confirmacao").value;
+
+      if (senha !== confirmacao) {
+        aviso.textContent = "As senhas estão diferentes. Confira e tente novamente.";
+        return;
+      }
+
+      botao.disabled = true;
+      aviso.textContent = "Salvando…";
+
+      const { error } = await supabase.auth.updateUser({ password: senha });
+
+      if (error) {
+        aviso.textContent = error.message;
+        botao.disabled = false;
+        return;
+      }
+
+      aviso.textContent = "Senha alterada. Aguarde…";
+      setTimeout(() => location.href = "./", 2500);
+    });
+
+    iniciar();
+  </script>
+</body>
+</html>
