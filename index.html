@@ -54,10 +54,8 @@ table{width:100%;border-collapse:collapse}td,th{padding:12px 8px;text-align:left
 <button class="btn violet" onclick="entrar()">ENTRAR NA DEMO</button></div>
 </section>
 
-<section id="dash" class="screen">
-<div class="nav"><button class="btn dark" onclick="sair()">Sair</button><button class="btn" onclick="go('client')">Página do cliente</button></div>
-<div class="section"><div class="eyebrow" style="color:#a778ff">PAINEL ADMINISTRATIVO</div><h1>Barbearia Imperial</h1><p class="muted">Visão geral do negócio • demonstração</p></div>
-<div class="dash"
+<section id="dash" class="screen"><div class="nav"><button class="btn dark" onclick="sair()">Sair</button><button class="btn dark" onclick="carregarAgenda()">↻ Atualizar agenda</button><button class="btn" onclick="go('client')">Página do cliente</button></div>
+<div class="section"><div class="eyebrow" style="color:#a778ff">PAINEL ADMINISTRATIVO</div><h1>Barbearia Imperial</h1><p class="muted">Visão geral do negócio • demonstração</p></div><div class="dash">
 <div class="card metric v">Agendamentos hoje<b id="count">8</b></div>
 <div class="card metric l">Receita do mês<b>R$ 6.840</b></div>
 <div class="card metric">Despesas<b>R$ 2.130</b></div>
