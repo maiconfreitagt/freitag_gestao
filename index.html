@@ -225,6 +225,8 @@ const SUPABASE_KEY = "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O";
         method: "POST",
         headers: {
           "apikey": SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
          //"Authorization": "Bearer " + SUPABASE_KEY,
         },
         body: JSON.stringify({
@@ -239,8 +241,6 @@ const SUPABASE_KEY = "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O";
       }
     );
 
-          "Content-Type": "application/json",
-          "Prefer": "return=minimal"
     if(!resposta.ok){
       const erro = await resposta.text();
       console.error(erro);
