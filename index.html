@@ -64,6 +64,7 @@ table{width:100%;border-collapse:collapse}td,th{padding:12px 8px;text-align:left
 <div class="section card"><h2>Agenda de hoje</h2><table><thead><tr><th>Hora</th><th>Cliente</th><th>Serviço</th><th>Status</th></tr></thead><tbody id="agenda">
 <tr><td colspan="4">Carregando agenda...</td></tr>
 </tbody></table></div>
+<div class="section card"><h2>Próximos agendamentos</h2><table><thead><tr><th>Data</th><th>Hora</th><th>Cliente</th><th>Serviço</th><th>Status</th></tr></thead><tbody id="proximos"><tr><td colspan="5">Carregando próximos agendamentos...</td></tr></tbody></table></div>
 </section>
 
 <div class="footer">Freitag Digital • Freitag Gestão V2 • demonstração com dados fictícios</div>
@@ -139,7 +140,31 @@ async function carregarAgenda(){
     console.error(erro);
     tbody.innerHTML = "<tr><td colspan='4'>Não foi possível carregar a agenda</td></tr>";
   }
+  carregarProximos();
 }
+async function carregarProximos(){
+  const tbody = document.getElementById("proximos");
+  if (!tbody) return;
+  const agora = new Date();
+  const hoje = agora.getFullYear() + "-" + String(agora.getMonth()+1).padStart(2,"0") + "-" + String(agora.getDate()).padStart(2,"0");
+  const url = "https://jhnucvynknltahppairt.supabase.co/rest/v1/agendamentos?select=date,cliente,servico,horario,status&date=gt." + hoje + "&order=date.asc,horario.asc&limit=20";
+  try {
+    const resposta = await fetch(url, {headers: {
+      "apikey": "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O",
+      "Authorization": "Bearer " + accessToken
+    }});
+    if (!resposta.ok) throw new Error(await resposta.text());
+    const lista = await resposta.json();
+    const seguro = valor => String(valor || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    tbody.innerHTML = lista.length
+      ? lista.map(a => "<tr><td>" + seguro(String(a.date || "").split("-").reverse().join("/")) + "</td><td>" + seguro(a.horario) + "</td><td>" + seguro(a.cliente) + "</td><td>" + seguro(a.servico) + "</td><td><span class='pill'>" + seguro(a.status || "Confirmado") + "</span></td></tr>").join("")
+      : "<tr><td colspan='5'>Nenhum agendamento futuro</td></tr>";
+  } catch (erro) {
+    console.error(erro);
+    tbody.innerHTML = "<tr><td colspan='5'>Não foi possível carregar os próximos agendamentos</td></tr>";
+  }
+}
+
 
 async function book(){
   const nome = document.getElementById("n").value.trim();
