@@ -10,9 +10,8 @@ header{display:flex;justify-content:space-between;align-items:center;padding:10p
 .avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--violet),#3c1c77);font-weight:900}.pro{display:flex;align-items:center;gap:12px}
 .form{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{font-size:12px;color:#bbb}input,select{width:100%;margin-top:6px;padding:13px;background:#101012;color:white;border:1px solid #37373d;border-radius:11px}.ok{margin-top:14px;padding:13px;border:1px solid #416c20;background:#192413;border-radius:11px;color:#d8ffb1}
 .login{max-width:430px;margin:45px auto}.dash{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.metric b{display:block;font-size:25px;margin-top:8px}.metric.l b{color:var(--lime)}.metric.v b{color:#a778ff}
-table{width:100%;border-collapse:collapse}td,th{padding:12px 8px;text-align:left;border-bottom:1px solid var(--line)}.pill{padding:5px 8px;border-radius:30px;background:#233417;color:#cfff9a;font-size:11px}.footer{text-align:center;color:#68686e;font-size:12px;padding:36px 0}
-@media(max-width:720px){.grid,.dash,.form{grid-template-columns:1fr}h1{font-size:34px}.hero{padding:34px 20px}.w{padding:12px}.actions .btn{flex:1}}
-</style></head><body><div class="w">
+table{width:100%;border-collapse:collapse}td,th{padding:12px 8px;text-align:left;border-bottom:1px solid var(--line)}.pill{padding:5px 8px;border-radius:30px;background:#233417;color:#cfff9a;font-size:11px}.footer{text-align:center;color:#68686e;font-size:12px;padding:36px 0}@media(max-width:720px){.grid,.dash,.form{grid-template-columns:1fr}h1{font-size:34px}.hero{padding:34px 20px}.w{padding:12px}.actions .btn{flex:1}#dash table{display:block}#dash table thead{display:none}#dash table tbody{display:block}#dash table tr{display:grid;grid-template-columns:1fr 1fr;gap:10px 8px;padding:14px 0;border-bottom:1px solid var(--line)}#dash table td{display:block;min-width:0;padding:0;border:0;font-size:14px;overflow-wrap:anywhere}#dash table td::before{content:attr(data-label);display:block;margin-bottom:3px;color:var(--gray);font-size:11px}#dash table td[colspan]{grid-column:1/-1}#dash table td[colspan]::before{display:none}}
+seguro(a.horario)</style></head><body><div class="w">
 
 <header><div class="logo">FREITAG <span>GESTÃO</span></div><div class="demo">DEMO • DADOS FICTÍCIOS</div></header>
 
@@ -130,7 +129,7 @@ async function carregarAgenda(){
     }[c]));
 
     tbody.innerHTML = lista.length
-      ? lista.map(a => "<tr><td>" + seguro(a.horario) +
+      ? lista.map(a => "<tr><td data-label='Hora'>" + seguro(a.horario) +
         "</td><td>" + seguro(a.cliente) +
         "</td><td>" + seguro(a.servico) +
         "</td><td><span class='pill'>" + seguro(a.status || "Confirmado") +
@@ -157,7 +156,7 @@ async function carregarProximos(){
     const lista = await resposta.json();
     const seguro = valor => String(valor || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
     tbody.innerHTML = lista.length
-      ? lista.map(a => "<tr><td>" + seguro(String(a.date || "").split("-").reverse().join("/")) + "</td><td>" + seguro(a.horario) + "</td><td>" + seguro(a.cliente) + "</td><td>" + seguro(a.servico) + "</td><td><span class='pill'>" + seguro(a.status || "Confirmado") + "</span></td></tr>").join("")
+      ? lista.map(a => "<tr><td data-label='Data'>" + seguro(String(a.date || "").split("-").reverse().join("/")) + "</td><td data-label='Hora'>" + seguro(a.horario) + "</td><td data-label='Cliente'>" + seguro(a.cliente) + "</td><td data-label='Serviço'>" + seguro(a.servico) + "</td><td data-label='Status'><span class='pill'>" + seguro(a.status || "Confirmado") + "</span></td></tr>").join("")
       : "<tr><td colspan='5'>Nenhum agendamento futuro</td></tr>";
   } catch (erro) {
     console.error(erro);
