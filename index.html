@@ -232,8 +232,11 @@ async function book(){
     const resposta = await fetch(SUPABASE_URL + "/rest/v1/agendamentos", {method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify({cliente:nome,telefone:telefone,servico:servico,profissional:profissional,date:data,horario:horario,status:"confirmado"})});
     if(!resposta.ok) throw new Error(await resposta.text());
     agendamentoAcabouDeSerSalvo = true; mensagem.innerHTML = "<div class='notice'>✓ Agendamento confirmado para <b>" + escapar(nome) + "</b> às <b>" + escapar(horario) + "</b>.</div>"; botao.textContent = "AGENDADO ✓";
-  } catch(erro) {
-    console.error(erro); mensagem.innerHTML = "<div class='notice'>❌ Não foi possível salvar o agendamento. Confira os dados e tente novamente.</div>"; botao.disabled = false; botao.textContent = "TENTAR NOVAMENTE";
+  } catch(erro) {    console.error(erro);
+    const detalheErro = String(erro.message || erro);
+    const conflitoHorario = detalheErro.includes("HORARIO_AGENDAMENTO_OCUPADO");
+    mensagem.innerHTML = conflitoHorario ? "<div class='notice'>⚠️ Esse horário acabou de ser reservado. Escolha outro horário.</div>" : "<div class='notice'>❌ Não foi possível salvar o agendamento. Confira os dados e tente novamente.</div>";
+    botao.disabled = false; botao.textContent = "TENTAR NOVAMENTE";
   } finally { envioAgendamentoEmCurso = false; }
 }const SUPABASE_URL = "https://jhnucvynknltahppairt.supabase.co";
 const SUPABASE_KEY = "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O";
