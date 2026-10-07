@@ -205,6 +205,213 @@ function dataHojeLocal(){
 let envioAgendamentoEmCurso = false;
 let agendamentoAcabouDeSerSalvo = false;
 const campoDataAgendamento = document.getElementById("d");
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Freitag Gestão — Demo V2</title><style>
+:root{--bg:#121212;--panel:#19191c;--lime:#A4FE1B;--violet:#7E3BED;--gray:#909090;--line:#303036}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:white;font-family:Arial,sans-serif}.w{max-width:1100px;margin:auto;padding:15px}.screen{display:none}.active{display:block}
+header{display:flex;justify-content:space-between;align-items:center;padding:10px 2px 20px}.logo{font-weight:900}.logo span{color:var(--lime)}.demo{font-size:11px;color:var(--gray);border:1px solid var(--line);padding:7px 9px;border-radius:20px}
+.hero{border:1px solid var(--line);border-radius:26px;padding:45px 24px;background:radial-gradient(circle at 85% 10%,rgba(126,59,237,.35),transparent 32%),linear-gradient(145deg,#202024,#111)}
+.eyebrow{color:var(--lime);font-size:12px;font-weight:bold;letter-spacing:1.4px}h1{font-size:43px;line-height:1.04;margin:10px 0 14px}.muted{color:var(--gray);line-height:1.5}
+.actions,.nav{display:flex;gap:10px;flex-wrap:wrap}.actions{margin-top:22px}.btn{border:0;border-radius:12px;padding:14px 17px;font-weight:900;background:var(--lime);color:#101010}.violet{background:var(--violet);color:white}.dark{background:#27272c;color:white;border:1px solid #393940}
+.section{margin-top:28px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{background:#19191c;border:1px solid var(--line);border-radius:18px;padding:17px}.service{min-height:150px;display:flex;flex-direction:column;justify-content:space-between}.icon{font-size:27px}.price,.stars{color:var(--lime)}.price{font-size:20px;font-weight:900}
+.avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--violet),#3c1c77);font-weight:900}.pro{display:flex;align-items:center;gap:12px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{font-size:12px;color:#bbb}input,select{width:100%;margin-top:6px;padding:13px;background:#101012;color:white;border:1px solid #37373d;border-radius:11px}.ok{margin-top:14px;padding:13px;border:1px solid #416c20;background:#192413;border-radius:11px;color:#d8ffb1}
+.login{max-width:430px;margin:45px auto}.dash{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.metric b{display:block;font-size:25px;margin-top:8px}.metric.l b{color:var(--lime)}.metric.v b{color:#a778ff}
+table{width:100%;border-collapse:collapse}td,th{padding:12px 8px;text-align:left;border-bottom:1px solid var(--line)}.pill{padding:5px 8px;border-radius:30px;background:#233417;color:#cfff9a;font-size:11px}.footer{text-align:center;color:#68686e;font-size:12px;padding:36px 0}@media(max-width:720px){.grid,.dash,.form{grid-template-columns:1fr}h1{font-size:34px}.hero{padding:34px 20px}.w{padding:12px}.actions .btn{flex:1}#dash table{display:block}#dash table thead{display:none}#dash table tbody{display:block}#dash table tr{display:grid;grid-template-columns:1fr 1fr;gap:10px 8px;padding:14px 0;border-bottom:1px solid var(--line)}#dash table td{display:block;min-width:0;padding:0;border:0;font-size:14px;overflow-wrap:anywhere}#dash table td::before{content:attr(data-label);display:block;margin-bottom:3px;color:var(--gray);font-size:11px}#dash table td[colspan]{grid-column:1/-1}#dash table td[colspan]::before{display:none}}.agenda-filtros{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 16px}.agenda-filtros label{display:block}@media(max-width:720px){.agenda-filtros{grid-template-columns:1fr}}.acoes-agenda{display:flex;gap:7px;flex-wrap:wrap}.acoes-agenda .btn{padding:8px 10px;font-size:12px;border-radius:9px}.btn.cancelar{background:#362020;color:#ffc0b8;border:1px solid #623333}.btn:disabled{opacity:.5;cursor:not-allowed}.pill.cancelado{background:#382020;color:#ffb4a9}dialog.modal{width:min(560px,calc(100% - 24px));max-height:90vh;overflow:auto;border:1px solid var(--line);border-radius:18px;background:var(--panel);color:#fff;padding:20px}dialog.modal::backdrop{background:rgba(0,0,0,.72)}dialog.modal h2{margin-top:0}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}.msg-edicao{color:#ffb4a9;margin-top:10px}@media(max-width:720px){.acoes-agenda{flex-direction:column}.acoes-agenda .btn{width:100%;padding:10px}}</style></head><body><div class="w">
+
+<header><div class="logo">FREITAG <span>GESTÃO</span></div><div class="demo">DEMO • DADOS FICTÍCIOS</div></header>
+
+<section id="home" class="screen active">
+<div class="hero"><div class="eyebrow">BARBEARIA IMPERIAL • EXPERIÊNCIA DIGITAL</div><h1>Seu estilo.<br>Seu horário.</h1><p class="muted">Conheça serviços, escolha seu profissional e agende pelo celular. A empresa acompanha tudo pelo Freitag Gestão.</p>
+<div class="actions"><button class="btn" onclick="go('client')">👤 SOU CLIENTE</button><button class="btn violet" onclick="go('login')">🔐 ÁREA DA EMPRESA</button></div></div>
+
+<div class="section"><h2>Serviços em destaque</h2><div class="grid">
+<div class="card service"><div><div class="icon">✂️</div><h3>Corte Premium</h3><p class="muted">Corte moderno com acabamento.</p></div><span class="price">R$ 45</span></div>
+<div class="card service"><div><div class="icon">🧔</div><h3>Barba</h3><p class="muted">Modelagem e acabamento.</p></div><span class="price">R$ 30</span></div>
+<div class="card service"><div><div class="icon">⚡</div><h3>Corte + Barba</h3><p class="muted">Experiência completa.</p></div><span class="price">R$ 65</span></div>
+</div></div>
+
+<div class="section"><h2>Profissionais</h2><div class="grid">
+<div class="card pro"><div class="avatar">L</div><div><b>Lucas</b><div class="stars">★★★★★</div><small class="muted">Cortes e degradê</small></div></div>
+<div class="card pro"><div class="avatar">R</div><div><b>Rafael</b><div class="stars">★★★★★</div><small class="muted">Barba e acabamento</small></div></div>
+<div class="card pro"><div class="avatar">B</div><div><b>Bruno</b><div class="stars">★★★★★</div><small class="muted">Estilo completo</small></div></div>
+</div></div>
+</section>
+
+<section id="client" class="screen">
+<div class="nav"><button class="btn dark" onclick="go('home')">← Voltar</button></div>
+<div class="hero"><div class="eyebrow">AGENDAMENTO ONLINE</div><h1>Reserve seu horário.</h1><p class="muted">Escolha o serviço, profissional, data e horário.</p></div>
+<div class="section card"><h2>Novo agendamento</h2><div class="form">
+<label>Serviço<select id="s"><option>Corte Premium — R$ 45</option><option>Barba — R$ 30</option><option>Corte + Barba — R$ 65</option></select></label>
+<label>Profissional<select id="p" onchange="carregarHorariosDisponiveis()"><option>Lucas</option><option>Rafael</option><option>Bruno</option></select></label>
+<label>Data<input id="d" type="date" required onchange="liberarNovoAgendamento()"></label>
+<label>Horário<select id="t" required onchange="liberarNovoAgendamento()"><option>09:00</option><option>10:30</option><option>14:30</option><option>16:00</option><option>18:00</option></select></label>
+<label>Nome<input id="n" placeholder="Seu nome" required oninput="liberarNovoAgendamento()"></label>
+<label>WhatsApp<input id="phone" type="tel" placeholder="(41) 99999-9999" required oninput="liberarNovoAgendamento()"></label>
+</div><div id="msg" role="status" aria-live="polite"></div><br><button id="bookBtn" class="btn" type="button" onclick="book()">CONFIRMAR AGENDAMENTO</button></div>
+</section>
+
+<section id="login" class="screen">
+<div class="nav"><button class="btn dark" onclick="go('home')">← Voltar</button></div>
+<div class="card login"><div class="eyebrow" style="color:#a778ff">ÁREA DA EMPRESA</div><h2>Freitag Gestão</h2><p class="muted">Acesso demonstrativo ao painel administrativo.</p>
+<label>E-mail<input id="adminEmail" type="email" placeholder="Seu e-mail"></label><br>
+<label>Senha<input id="adminPassword" type="password" placeholder="Sua senha"></label><br><br>
+<button class="btn violet" onclick="entrar()">ENTRAR NA DEMO</button></div>
+</section>
+
+<section id="dash" class="screen"><div class="nav"><button class="btn dark" onclick="sair()">Sair</button><button class="btn dark" onclick="carregarAgenda()">↻ Atualizar agenda</button><button class="btn" onclick="go('client')">Página do cliente</button></div>
+<div class="section"><div class="eyebrow" style="color:#a778ff">PAINEL ADMINISTRATIVO</div><h1>Barbearia Imperial</h1><p class="muted">Visão geral do negócio • demonstração</p></div><div class="dash">
+<div class="card metric v">Agendamentos hoje<b id="count">8</b></div>
+<div class="card metric l">Receita do mês<b>R$ 6.840</b></div>
+<div class="card metric">Despesas<b>R$ 2.130</b></div>
+<div class="card metric l">Saldo<b>R$ 4.710</b></div>
+</div>
+<div class="section card"><h2>Agenda de hoje</h2><table><thead><tr><th>Hora</th><th>Cliente</th><th>Serviço</th><th>Status</th><th>Ações</th></tr></thead><tbody id="agenda">
+<tr><td colspan="5">Carregando agenda...</td></tr>
+</tbody></table></div>
+<div class="section card"><h2>Próximos agendamentos</h2><div class="agenda-filtros"><label>Buscar cliente<input id="buscaProximos" type="search" placeholder="Digite o nome do cliente" oninput="renderizarProximos()"></label><label>Filtrar por data<input id="dataProximos" type="date" onchange="renderizarProximos()"></label></div><table><thead><tr><th>Data</th><th>Hora</th><th>Cliente</th><th>Serviço</th><th>Status</th><th>Ações</th></tr></thead><tbody id="proximos"><tr><td colspan="6">Carregando próximos agendamentos...</td></tr></tbody></table></div>
+</section>
+
+<div class="footer">Freitag Digital • Freitag Gestão V2 • demonstração com dados fictícios</div>
+</div>
+
+<script>
+function go(x){
+document.querySelectorAll(".screen").forEach(e=>e.classList.remove("active"));
+document.getElementById(x).classList.add("active");
+scrollTo(0,0);
+}
+let accessToken = "";
+function sair(){
+  accessToken = "";
+  go("home");
+  }
+async function entrar(){
+  const email = document.getElementById("adminEmail").value.trim();
+  const senha = document.getElementById("adminPassword").value;
+  try {
+    const resposta = await fetch("https://jhnucvynknltahppairt.supabase.co/auth/v1/token?grant_type=password", {
+      method: "POST",
+      headers: {
+                "apikey": "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({email: email, password: senha})
+    });
+    const dados = await resposta.json();
+    if (!resposta.ok) throw new Error("E-mail ou senha incorretos.");
+    accessToken = dados.access_token;
+    go("dash");
+    await carregarAgenda();
+  } catch (erro) {
+    alert(erro.message);
+  }
+  }
+async function carregarAgenda(){
+  const tbody = document.getElementById("agenda");
+  const contador = document.getElementById("count");
+  const agora = new Date();
+  const hoje = agora.getFullYear() + "-" +
+    String(agora.getMonth()+1).padStart(2,"0") + "-" +
+    String(agora.getDate()).padStart(2,"0");
+
+  const url = "https://jhnucvynknltahppairt.supabase.co/rest/v1/agendamentos?select=cliente,servico,horario,status&date=eq." + hoje + "&order=horario.asc";
+
+  try {
+    const resposta = await fetch(url, {
+      headers: {
+        "apikey": "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O",
+    "Authorization": "Bearer " + accessToken
+      }
+    });
+
+    if (!resposta.ok) throw new Error(await resposta.text());
+
+    const lista = await resposta.json();
+    if (contador) contador.textContent = lista.length;
+
+    const seguro = valor => String(valor || "").replace(/[&<>"']/g, c => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    }[c]));
+
+    tbody.innerHTML = lista.length
+      ? lista.map(a => "<tr><td data-label='Hora'>" + seguro(a.horario) +
+        "</td><td>" + seguro(a.cliente) +
+        "</td><td>" + seguro(a.servico) +
+        "</td><td><span class='pill'>" + seguro(a.status || "Confirmado") +
+        "</span></td></tr>").join("")
+      : "<tr><td colspan='4'>Nenhum agendamento hoje</td></tr>";
+  } catch (erro) {
+    console.error(erro);
+    tbody.innerHTML = "<tr><td colspan='4'>Não foi possível carregar a agenda</td></tr>";
+  }
+  carregarProximos();
+}
+async function carregarProximos(){
+  const tbody = document.getElementById("proximos");
+  if (!tbody) return;
+  const agora = new Date();
+  const hoje = agora.getFullYear() + "-" + String(agora.getMonth()+1).padStart(2,"0") + "-" + String(agora.getDate()).padStart(2,"0");
+  const url = "https://jhnucvynknltahppairt.supabase.co/rest/v1/agendamentos?select=date,cliente,servico,horario,status&date=gt." + hoje + "&order=date.asc,horario.asc&limit=20";
+  try {
+    const resposta = await fetch(url, {headers: {
+      "apikey": "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O",
+      "Authorization": "Bearer " + accessToken
+    }});
+    if (!resposta.ok) throw new Error(await resposta.text());
+    const lista = await resposta.json();
+    const seguro = valor => String(valor || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    tbody.innerHTML = lista.length
+      ? lista.map(a => "<tr><td data-label='Data'>" + seguro(String(a.date || "").split("-").reverse().join("/")) + "</td><td data-label='Hora'>" + seguro(a.horario) + "</td><td data-label='Cliente'>" + seguro(a.cliente) + "</td><td data-label='Serviço'>" + seguro(a.servico) + "</td><td data-label='Status'><span class='pill'>" + seguro(a.status || "Confirmado") + "</span></td></tr>").join("")
+      : "<tr><td colspan='5'>Nenhum agendamento futuro</td></tr>";
+  } catch (erro) {
+    console.error(erro);
+    tbody.innerHTML = "<tr><td colspan='5'>Não foi possível carregar os próximos agendamentos</td></tr>";
+  }
+}let agendamentosFuturos = [];
+function renderizarProximos(){
+  const tbody = document.getElementById("proximos");
+  if (!tbody) return;
+  const busca = (document.getElementById("buscaProximos")?.value || "").trim().toLocaleLowerCase("pt-BR");
+  const data = document.getElementById("dataProximos")?.value || "";
+  const filtrados = agendamentosFuturos.filter(a => (!data || a.date === data) && (!busca || String(a.cliente || "").toLocaleLowerCase("pt-BR").includes(busca)));
+  const seguro = valor => String(valor || "").split("&").join("&amp;").split("<").join("&lt;").split(">").join("&gt;").split(String.fromCharCode(34)).join("&quot;").split("'").join("&#39;");
+  tbody.innerHTML = filtrados.length
+    ? filtrados.map(a => "<tr><td data-label='Data'>" + seguro(String(a.date || "").split("-").reverse().join("/")) + "</td><td data-label='Hora'>" + seguro(a.horario) + "</td><td data-label='Cliente'>" + seguro(a.cliente) + "</td><td data-label='Serviço'>" + seguro(a.servico) + "</td><td data-label='Status'><span class='pill'>" + seguro(a.status || "Confirmado") + "</span></td></tr>").join("")
+    : agendamentosFuturos.length ? "<tr><td colspan='5'>Nenhum agendamento encontrado com esses filtros</td></tr>" : "<tr><td colspan='5'>Nenhum agendamento futuro</td></tr>";
+}
+async function carregarProximos(){
+  const tbody = document.getElementById("proximos");
+  if (!tbody) return;
+  const agora = new Date();
+  const hoje = agora.getFullYear() + "-" + String(agora.getMonth()+1).padStart(2,"0") + "-" + String(agora.getDate()).padStart(2,"0");
+  const url = "https://jhnucvynknltahppairt.supabase.co/rest/v1/agendamentos?select=date,cliente,servico,horario,status&date=gt." + hoje + "&order=date.asc,horario.asc";
+  try {
+    agendamentosFuturos = [];
+    for (let inicio = 0; ; inicio += 1000) {
+      const resposta = await fetch(url, {headers:{"apikey":"sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O","Authorization":"Bearer " + accessToken,"Range-Unit":"items","Range":inicio + "-" + (inicio + 999)}});
+      if (!resposta.ok) throw new Error(await resposta.text());
+      const pagina = await resposta.json();
+      agendamentosFuturos.push(...pagina);
+      if (pagina.length < 1000) break;
+    }
+    renderizarProximos();
+  } catch (erro) {
+    console.error(erro);
+    tbody.innerHTML = "<tr><td colspan='5'>Não foi possível carregar os próximos agendamentos</td></tr>";
+  }
+}
+
+
+
+
+function dataHojeLocal(){
+  const hoje = new Date();
+  return [hoje.getFullYear(), String(hoje.getMonth()+1).padStart(2,"0"), String(hoje.getDate()).padStart(2,"0")].join("-");
+}
+let envioAgendamentoEmCurso = false;
+let agendamentoAcabouDeSerSalvo = false;
+const campoDataAgendamento = document.getElementById("d");
 if (campoDataAgendamento) campoDataAgendamento.min = dataHojeLocal();
 function liberarNovoAgendamento(){
   if (envioAgendamentoEmCurso) return;
@@ -394,6 +601,11 @@ function renderizarProximos(){
   let baseLiberar = window.liberarNovoAgendamento;
   let baseBook = window.book;
   let aviso = document.getElementById("disponibilidadeHorario");
+  const horarioAtualLocal = () => {
+    const agora = new Date();
+    return String(agora.getHours()).padStart(2, "0") + ":" + String(agora.getMinutes()).padStart(2, "0");
+  };
+  const horarioPassou = (data, horario) => data === dataHojeLocal() && horario <= horarioAtualLocal();
   if (!aviso) {
     aviso = document.createElement("span");
     aviso.id = "disponibilidadeHorario";
@@ -445,20 +657,25 @@ function renderizarProximos(){
       let primeiroLivre = "";
       for (const horario of horariosAtendimento) {
         const ocupado = ocupados.has(horario);
-        const opcao = new Option(horario + (ocupado ? " — ocupado" : " — livre"), horario);
-        opcao.disabled = ocupado;
+        const passou = horarioPassou(data, horario);
+        const indisponivel = ocupado || passou;
+        const detalhe = ocupado ? "ocupado" : passou ? "horário passou" : "livre";
+        const opcao = new Option(horario + " — " + detalhe, horario);
+        opcao.disabled = indisponivel;
         seletor.add(opcao);
-        if (!ocupado && !primeiroLivre) primeiroLivre = horario;
+        if (!indisponivel && !primeiroLivre) primeiroLivre = horario;
       }
       disponibilidadeVerificada = true;
       if (!primeiroLivre) {
         seletor.replaceChildren(new Option("Nenhum horário livre", ""));
-        aviso.textContent = "Não há horários livres para esse profissional nessa data.";
+        aviso.textContent = data === dataHojeLocal()
+          ? "Todos os horários de hoje já passaram ou estão ocupados."
+          : "Não há horários livres para esse profissional nessa data.";
         return;
       }
       seletor.value = primeiroLivre;
       seletor.disabled = false;
-      const quantidade = horariosAtendimento.length - ocupados.size;
+      const quantidade = horariosAtendimento.filter(horario => !ocupados.has(horario) && !horarioPassou(data, horario)).length;
       aviso.textContent = quantidade + (quantidade === 1 ? " horário livre. Horários ocupados estão desativados." : " horários livres. Horários ocupados estão desativados.");
       window.liberarNovoAgendamento();
     } catch (erro) {
@@ -486,6 +703,318 @@ function renderizarProximos(){
         return;
       }
       const horario = seletor.value;
+      if (horarioPassou(campoData.value, horario)) {
+        document.getElementById("msg").textContent = "Esse horário já passou. Escolha outro.";
+        await window.carregarHorariosDisponiveis();
+        return;
+      }
+      await baseBook();
+      if (agendamentoAcabouDeSerSalvo) {
+        const salva = Array.from(seletor.options).find(item => item.value === horario);
+        if (salva) { salva.disabled = true; salva.textContent = horario + " — ocupado"; }
+      } else if (document.getElementById("msg").textContent.includes("acabou de ser reservado")) {
+        await window.carregarHorariosDisponiveis();
+      }
+    };
+  }
+})();
+</script>
+</body></html>if (campoDataAgendamento) campoDataAgendamento.min = dataHojeLocal();
+function liberarNovoAgendamento(){
+  if (envioAgendamentoEmCurso) return;
+  agendamentoAcabouDeSerSalvo = false;
+  const botao = document.getElementById("bookBtn");
+  if (botao) { botao.disabled = false; botao.textContent = "CONFIRMAR AGENDAMENTO"; }
+  document.getElementById("msg").innerHTML = "";
+}
+async function book(){
+  const nome = document.getElementById("n").value.trim();
+  const telefone = document.getElementById("phone").value.trim();
+  const data = document.getElementById("d").value;
+  const horario = document.getElementById("t").value;
+  const servicoCompleto = document.getElementById("s").value;
+  const profissionalEl = document.getElementById("p");
+  const profissional = profissionalEl ? profissionalEl.value : "";
+  const servico = servicoCompleto.split("—")[0].trim();
+  const mensagem = document.getElementById("msg");
+  const botao = document.getElementById("bookBtn");
+  if (envioAgendamentoEmCurso || agendamentoAcabouDeSerSalvo) return;
+  if(!nome || !telefone || !data || !horario){ mensagem.innerHTML = "<div class='notice'>⚠️ Preencha todos os campos.</div>"; return; }
+  if(data < dataHojeLocal()){ mensagem.innerHTML = "<div class='notice'>⚠️ Escolha hoje ou uma data futura.</div>"; return; }
+  envioAgendamentoEmCurso = true; botao.disabled = true; botao.textContent = "SALVANDO...";
+  try {
+    const resposta = await fetch(SUPABASE_URL + "/rest/v1/agendamentos", {method:"POST",headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify({cliente:nome,telefone:telefone,servico:servico,profissional:profissional,date:data,horario:horario,status:"confirmado"})});
+    if(!resposta.ok) throw new Error(await resposta.text());
+    agendamentoAcabouDeSerSalvo = true; mensagem.innerHTML = "<div class='notice'>✓ Agendamento confirmado para <b>" + escapar(nome) + "</b> às <b>" + escapar(horario) + "</b>.</div>"; botao.textContent = "AGENDADO ✓";
+  } catch(erro) {    console.error(erro);
+    const detalheErro = String(erro.message || erro);
+    const conflitoHorario = detalheErro.includes("HORARIO_AGENDAMENTO_OCUPADO");
+    mensagem.innerHTML = conflitoHorario ? "<div class='notice'>⚠️ Esse horário acabou de ser reservado. Escolha outro horário.</div>" : "<div class='notice'>❌ Não foi possível salvar o agendamento. Confira os dados e tente novamente.</div>";
+    botao.disabled = false; botao.textContent = "TENTAR NOVAMENTE";
+  } finally { envioAgendamentoEmCurso = false; }
+}const SUPABASE_URL = "https://jhnucvynknltahppairt.supabase.co";
+const SUPABASE_KEY = "sb_publishable_PYucvw3zy5nBXPkPTEIVkg_I2kHpz-O";
+const agendamentosPorId = new Map();
+
+function escapar(valor){
+  return String(valor || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function etiquetaStatus(status){
+  const cancelado = String(status || "").toLocaleLowerCase("pt-BR") === "cancelado";
+  return "<span class='pill" + (cancelado ? " cancelado" : "") + "'>" + escapar(status || "Confirmado") + "</span>";
+}
+function botoesAgendamento(a){
+  const id = escapar(a.id);
+  const cancelado = String(a.status || "").toLocaleLowerCase("pt-BR") === "cancelado";
+  return "<div class='acoes-agenda'><button type='button' class='btn dark' data-action='editar' data-id='" + id + "'>Editar</button> <button type='button' class='btn cancelar' data-action='cancelar' data-id='" + id + "'" + (cancelado ? " disabled" : "") + ">" + (cancelado ? "Cancelado" : "Cancelar") + "</button></div>";
+}
+function tratarAcaoAgenda(event){
+  const botao = event.target.closest("[data-action]");
+  if (!botao || botao.disabled) return;
+  const id = botao.dataset.id;
+  if (botao.dataset.action === "editar") abrirEdicao(id);
+  if (botao.dataset.action === "cancelar") cancelarAgendamento(id);
+}
+document.getElementById("agenda").addEventListener("click", tratarAcaoAgenda);
+document.getElementById("proximos").addEventListener("click", tratarAcaoAgenda);
+
+function abrirEdicao(id){
+  const a = agendamentosPorId.get(id);
+  if (!a) return;
+  document.getElementById("edicaoId").value = a.id;
+  document.getElementById("edicaoCliente").value = a.cliente || "";
+  document.getElementById("edicaoTelefone").value = a.telefone || "";
+  document.getElementById("edicaoServico").value = a.servico || "";
+  document.getElementById("edicaoProfissional").value = a.profissional || "";
+  document.getElementById("edicaoData").value = a.date || "";
+  document.getElementById("edicaoHorario").value = String(a.horario || "").slice(0,5);
+  document.getElementById("mensagemEdicao").textContent = "";
+  document.getElementById("edicaoAgendamento").showModal();
+}
+function fecharEdicao(){ document.getElementById("edicaoAgendamento").close(); }
+async function salvarEdicao(event){
+  event.preventDefault();
+  const id = document.getElementById("edicaoId").value;
+  const campos = {
+    cliente: document.getElementById("edicaoCliente").value.trim(),
+    telefone: document.getElementById("edicaoTelefone").value.trim(),
+    servico: document.getElementById("edicaoServico").value.trim(),
+    profissional: document.getElementById("edicaoProfissional").value.trim(),
+    date: document.getElementById("edicaoData").value,
+    horario: document.getElementById("edicaoHorario").value
+  };
+  const mensagem = document.getElementById("mensagemEdicao");
+  const botao = document.getElementById("salvarEdicaoBtn");
+  botao.disabled = true;
+  mensagem.textContent = "Salvando...";
+  try {
+    await atualizarAgendamento(id, campos);
+    fecharEdicao();
+    await carregarAgenda();
+  } catch(erro) {
+    console.error(erro);
+    mensagem.textContent = "Não foi possível salvar. Confira o acesso da conta e tente novamente.";
+  } finally { botao.disabled = false; }
+}
+async function cancelarAgendamento(id){
+  const a = agendamentosPorId.get(id);
+  if (!a || !window.confirm("Cancelar o agendamento de " + (a.cliente || "este cliente") + "? Ele ficará no histórico com status Cancelado.")) return;
+  try {
+    await atualizarAgendamento(id, {status:"cancelado"});
+    await carregarAgenda();
+  } catch(erro) {
+    console.error(erro);
+    window.alert("Não foi possível cancelar. Confira o acesso da conta e tente novamente.");
+  }
+}
+async function atualizarAgendamento(id, campos){
+  const resposta = await fetch(SUPABASE_URL + "/rest/v1/agendamentos?id=eq." + encodeURIComponent(id), {
+    method:"PATCH",
+    headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer " + accessToken,"Content-Type":"application/json","Prefer":"return=representation"},
+    body:JSON.stringify(campos)
+  });
+  if (!resposta.ok) throw new Error(await resposta.text());
+  const atualizados = await resposta.json();
+  if (!Array.isArray(atualizados) || atualizados.length !== 1) {
+    throw new Error("Nenhum agendamento foi alterado.");
+  }
+  return atualizados[0];
+}
+  async function carregarAgenda(){
+  const tbody = document.getElementById("agenda");
+  const contador = document.getElementById("count");
+  const agora = new Date();
+  const hoje = agora.getFullYear() + "-" + String(agora.getMonth()+1).padStart(2,"0") + "-" + String(agora.getDate()).padStart(2,"0");
+  const campos = "id,date,cliente,telefone,servico,profissional,horario,status";
+  const url = SUPABASE_URL + "/rest/v1/agendamentos?select=" + campos + "&date=eq." + hoje + "&order=horario.asc";
+  agendamentosPorId.clear();
+  try {
+    const resposta = await fetch(url,{headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer " + accessToken}});
+    if (!resposta.ok) throw new Error(await resposta.text());
+    const lista = await resposta.json();
+    lista.forEach(a => agendamentosPorId.set(a.id,a));
+    if (contador) contador.textContent = lista.length;
+    tbody.innerHTML = lista.length ? lista.map(a => "<tr><td data-label='Hora'>"+escapar(a.horario)+"</td><td data-label='Cliente'>"+escapar(a.cliente)+"</td><td data-label='Serviço'>"+escapar(a.servico)+"</td><td data-label='Status'>"+etiquetaStatus(a.status)+"</td><td data-label='Ações'>"+botoesAgendamento(a)+"</td></tr>").join("") : "<tr><td colspan='5'>Nenhum agendamento hoje</td></tr>";
+  } catch(erro) {
+    console.error(erro);
+    tbody.innerHTML = "<tr><td colspan='5'>Não foi possível carregar a agenda</td></tr>";
+  }
+  await carregarProximos();
+}
+async function carregarProximos(){
+  const tbody = document.getElementById("proximos");
+  const agora = new Date();
+  const hoje = agora.getFullYear() + "-" + String(agora.getMonth()+1).padStart(2,"0") + "-" + String(agora.getDate()).padStart(2,"0");
+  const campos = "id,date,cliente,telefone,servico,profissional,horario,status";
+  const url = SUPABASE_URL + "/rest/v1/agendamentos?select=" + campos + "&date=gt." + hoje + "&order=date.asc,horario.asc";
+  try {
+    agendamentosFuturos = [];
+    for (let inicio=0;;inicio+=1000) {
+      const resposta = await fetch(url,{headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer " + accessToken,"Range-Unit":"items","Range":inicio+"-"+(inicio+999)}});
+      if (!resposta.ok) throw new Error(await resposta.text());
+      const pagina = await resposta.json();
+      agendamentosFuturos.push(...pagina);
+      pagina.forEach(a => agendamentosPorId.set(a.id,a));
+      if (pagina.length<1000) break;
+    }
+    renderizarProximos();
+  } catch(erro) {
+    console.error(erro);
+    tbody.innerHTML = "<tr><td colspan='6'>Não foi possível carregar os próximos agendamentos</td></tr>";
+  }
+}
+function renderizarProximos(){
+  const tbody = document.getElementById("proximos");
+  const busca = (document.getElementById("buscaProximos")?.value || "").trim().toLocaleLowerCase("pt-BR");
+  const data = document.getElementById("dataProximos")?.value || "";
+  const filtrados = agendamentosFuturos.filter(a => (!data || a.date===data) && (!busca || String(a.cliente || "").toLocaleLowerCase("pt-BR").includes(busca)));
+  tbody.innerHTML = filtrados.length ? filtrados.map(a => "<tr><td data-label='Data'>"+escapar(String(a.date || "").split("-").reverse().join("/"))+"</td><td data-label='Hora'>"+escapar(a.horario)+"</td><td data-label='Cliente'>"+escapar(a.cliente)+"</td><td data-label='Serviço'>"+escapar(a.servico)+"</td><td data-label='Status'>"+etiquetaStatus(a.status)+"</td><td data-label='Ações'>"+botoesAgendamento(a)+"</td></tr>").join("") : agendamentosFuturos.length ? "<tr><td colspan='6'>Nenhum agendamento encontrado com esses filtros</td></tr>" : "<tr><td colspan='6'>Nenhum agendamento futuro</td></tr>";
+}document.body.insertAdjacentHTML("beforeend", 
+  '<dialog id="edicaoAgendamento" class="modal"><form onsubmit="salvarEdicao(event)"><input id="edicaoId" type="hidden"><h2>Editar agendamento</h2><div class="form"><label>Cliente<input id="edicaoCliente" required></label><label>WhatsApp<input id="edicaoTelefone" required></label><label>Serviço<input id="edicaoServico" required></label><label>Profissional<input id="edicaoProfissional" required></label><label>Data<input id="edicaoData" type="date" required></label><label>Horário<input id="edicaoHorario" type="time" required></label></div><div id="mensagemEdicao" class="msg-edicao" role="status"></div><div class="modal-actions"><button type="button" class="btn dark" onclick="fecharEdicao()">Voltar</button><button id="salvarEdicaoBtn" type="submit" class="btn">Salvar alterações</button></div></form></dialog>');
+
+
+</script>
+<script>
+(() => {
+  const horariosAtendimento = ["09:00", "10:30", "14:30", "16:00", "18:00"];
+  const campoData = document.getElementById("d");
+  const campoProfissional = document.getElementById("p");
+  const seletor = document.getElementById("t");
+  const botao = document.getElementById("bookBtn");
+  if (!campoData || !campoProfissional || !seletor || !botao) return;
+
+  let consultaId = 0;
+  let disponibilidadeVerificada = false;
+  let baseLiberar = window.liberarNovoAgendamento;
+  let baseBook = window.book;
+  let aviso = document.getElementById("disponibilidadeHorario");
+  const horarioAtualLocal = () => {
+    const agora = new Date();
+    return String(agora.getHours()).padStart(2, "0") + ":" + String(agora.getMinutes()).padStart(2, "0");
+  };
+  const horarioPassou = (data, horario) => data === dataHojeLocal() && horario <= horarioAtualLocal();
+  if (!aviso) {
+    aviso = document.createElement("span");
+    aviso.id = "disponibilidadeHorario";
+    aviso.setAttribute("role", "status");
+    aviso.setAttribute("aria-live", "polite");
+    aviso.style.cssText = "display:block;margin-top:8px;color:#a4ff00;font-size:.92em";
+    seletor.insertAdjacentElement("afterend", aviso);
+  }
+
+  window.liberarNovoAgendamento = function(){
+    if (baseLiberar) baseLiberar();
+    botao.disabled = !disponibilidadeVerificada || !seletor.value || !!seletor.selectedOptions[0]?.disabled;
+  };
+
+  window.carregarHorariosDisponiveis = async function(){
+    const idAtual = ++consultaId;
+    const data = campoData.value;
+    const profissional = campoProfissional.value;
+    disponibilidadeVerificada = false;
+    seletor.disabled = true;
+    botao.disabled = true;
+    seletor.replaceChildren(new Option("Consultando horários...", ""));
+    aviso.style.color = "#a4ff00";
+    aviso.textContent = "Buscando horários livres…";
+
+    if (!data) {
+      seletor.replaceChildren(new Option("Escolha uma data", ""));
+      aviso.textContent = "Escolha a data para consultar os horários livres.";
+      return;
+    }
+    if (data < dataHojeLocal()) {
+      seletor.replaceChildren(new Option("Data inválida", ""));
+      aviso.style.color = "#ffaaa3";
+      aviso.textContent = "Escolha hoje ou uma data futura.";
+      return;
+    }
+
+    try {
+      const resposta = await fetch(SUPABASE_URL + "/rest/v1/rpc/horarios_ocupados", {
+        method: "POST",
+        headers: {"apikey": SUPABASE_KEY, "Content-Type": "application/json"},
+        body: JSON.stringify({p_data: data, p_profissional: profissional})
+      });
+      if (!resposta.ok) throw new Error(await resposta.text());
+      const lista = await resposta.json();
+      if (idAtual !== consultaId) return;
+      const ocupados = new Set(lista.map(item => String(item.horario || "").slice(0, 5)));
+      seletor.replaceChildren();
+      let primeiroLivre = "";
+      for (const horario of horariosAtendimento) {
+        const ocupado = ocupados.has(horario);
+        const passou = horarioPassou(data, horario);
+        const indisponivel = ocupado || passou;
+        const detalhe = ocupado ? "ocupado" : passou ? "horário passou" : "livre";
+        const opcao = new Option(horario + " — " + detalhe, horario);
+        opcao.disabled = indisponivel;
+        seletor.add(opcao);
+        if (!indisponivel && !primeiroLivre) primeiroLivre = horario;
+      }
+      disponibilidadeVerificada = true;
+      if (!primeiroLivre) {
+        seletor.replaceChildren(new Option("Nenhum horário livre", ""));
+        aviso.textContent = data === dataHojeLocal()
+          ? "Todos os horários de hoje já passaram ou estão ocupados."
+          : "Não há horários livres para esse profissional nessa data.";
+        return;
+      }
+      seletor.value = primeiroLivre;
+      seletor.disabled = false;
+      const quantidade = horariosAtendimento.filter(horario => !ocupados.has(horario) && !horarioPassou(data, horario)).length;
+      aviso.textContent = quantidade + (quantidade === 1 ? " horário livre. Horários ocupados estão desativados." : " horários livres. Horários ocupados estão desativados.");
+      window.liberarNovoAgendamento();
+    } catch (erro) {
+      if (idAtual !== consultaId) return;
+      console.error(erro);
+      seletor.replaceChildren(new Option("Disponibilidade indisponível", ""));
+      aviso.style.color = "#ffaaa3";
+      aviso.textContent = "Não foi possível conferir os horários. Tente novamente antes de agendar.";
+    }
+  };
+
+  campoData.addEventListener("change", window.carregarHorariosDisponiveis);
+  campoProfissional.addEventListener("change", window.carregarHorariosDisponiveis);
+  seletor.addEventListener("change", window.liberarNovoAgendamento);
+  seletor.disabled = true;
+  botao.disabled = true;
+  seletor.replaceChildren(new Option("Escolha uma data para consultar", ""));
+  aviso.textContent = "Selecione a data para ver os horários livres.";
+
+  if (baseBook) {
+    window.book = async function(){
+      const opcao = seletor.selectedOptions[0];
+      if (!disponibilidadeVerificada || !seletor.value || !opcao || opcao.disabled) {
+        document.getElementById("msg").textContent = "Consulte a disponibilidade e escolha um horário livre.";
+        return;
+      }
+      const horario = seletor.value;
+      if (horarioPassou(campoData.value, horario)) {
+        document.getElementById("msg").textContent = "Esse horário já passou. Escolha outro.";
+        await window.carregarHorariosDisponiveis();
+        return;
+      }
       await baseBook();
       if (agendamentoAcabouDeSerSalvo) {
         const salva = Array.from(seletor.options).find(item => item.value === horario);
