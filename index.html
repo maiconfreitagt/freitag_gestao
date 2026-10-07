@@ -36,7 +36,7 @@ table{width:100%;border-collapse:collapse}td,th{padding:12px 8px;text-align:left
 <div class="hero"><div class="eyebrow">AGENDAMENTO ONLINE</div><h1>Reserve seu horário.</h1><p class="muted">Escolha o serviço, profissional, data e horário.</p></div>
 <div class="section card"><h2>Novo agendamento</h2><div class="form">
 <label>Serviço<select id="s"><option>Corte Premium — R$ 45</option><option>Barba — R$ 30</option><option>Corte + Barba — R$ 65</option></select></label>
-<label>Profissional<select id="p"><option>Lucas</option><option>Rafael</option><option>Bruno</option></select></label>
+<label>Profissional<select id="p" onchange="carregarHorariosDisponiveis()"><option>Lucas</option><option>Rafael</option><option>Bruno</option></select></label>
 <label>Data<input id="d" type="date" required onchange="liberarNovoAgendamento()"></label>
 <label>Horário<select id="t" required onchange="liberarNovoAgendamento()"><option>09:00</option><option>10:30</option><option>14:30</option><option>16:00</option><option>18:00</option></select></label>
 <label>Nome<input id="n" placeholder="Seu nome" required oninput="liberarNovoAgendamento()"></label>
@@ -379,5 +379,122 @@ function renderizarProximos(){
   '<dialog id="edicaoAgendamento" class="modal"><form onsubmit="salvarEdicao(event)"><input id="edicaoId" type="hidden"><h2>Editar agendamento</h2><div class="form"><label>Cliente<input id="edicaoCliente" required></label><label>WhatsApp<input id="edicaoTelefone" required></label><label>Serviço<input id="edicaoServico" required></label><label>Profissional<input id="edicaoProfissional" required></label><label>Data<input id="edicaoData" type="date" required></label><label>Horário<input id="edicaoHorario" type="time" required></label></div><div id="mensagemEdicao" class="msg-edicao" role="status"></div><div class="modal-actions"><button type="button" class="btn dark" onclick="fecharEdicao()">Voltar</button><button id="salvarEdicaoBtn" type="submit" class="btn">Salvar alterações</button></div></form></dialog>');
 
 
+</script>
+<script>
+(() => {
+  const horariosAtendimento = ["09:00", "10:30", "14:30", "16:00", "18:00"];
+  const campoData = document.getElementById("d");
+  const campoProfissional = document.getElementById("p");
+  const seletor = document.getElementById("t");
+  const botao = document.getElementById("bookBtn");
+  if (!campoData || !campoProfissional || !seletor || !botao) return;
+
+  let consultaId = 0;
+  let disponibilidadeVerificada = false;
+  let baseLiberar = window.liberarNovoAgendamento;
+  let baseBook = window.book;
+  let aviso = document.getElementById("disponibilidadeHorario");
+  if (!aviso) {
+    aviso = document.createElement("span");
+    aviso.id = "disponibilidadeHorario";
+    aviso.setAttribute("role", "status");
+    aviso.setAttribute("aria-live", "polite");
+    aviso.style.cssText = "display:block;margin-top:8px;color:#a4ff00;font-size:.92em";
+    seletor.insertAdjacentElement("afterend", aviso);
+  }
+
+  window.liberarNovoAgendamento = function(){
+    if (baseLiberar) baseLiberar();
+    botao.disabled = !disponibilidadeVerificada || !seletor.value || !!seletor.selectedOptions[0]?.disabled;
+  };
+
+  window.carregarHorariosDisponiveis = async function(){
+    const idAtual = ++consultaId;
+    const data = campoData.value;
+    const profissional = campoProfissional.value;
+    disponibilidadeVerificada = false;
+    seletor.disabled = true;
+    botao.disabled = true;
+    seletor.replaceChildren(new Option("Consultando horários...", ""));
+    aviso.style.color = "#a4ff00";
+    aviso.textContent = "Buscando horários livres…";
+
+    if (!data) {
+      seletor.replaceChildren(new Option("Escolha uma data", ""));
+      aviso.textContent = "Escolha a data para consultar os horários livres.";
+      return;
+    }
+    if (data < dataHojeLocal()) {
+      seletor.replaceChildren(new Option("Data inválida", ""));
+      aviso.style.color = "#ffaaa3";
+      aviso.textContent = "Escolha hoje ou uma data futura.";
+      return;
+    }
+
+    try {
+      const resposta = await fetch(SUPABASE_URL + "/rest/v1/rpc/horarios_ocupados", {
+        method: "POST",
+        headers: {"apikey": SUPABASE_KEY, "Content-Type": "application/json"},
+        body: JSON.stringify({p_data: data, p_profissional: profissional})
+      });
+      if (!resposta.ok) throw new Error(await resposta.text());
+      const lista = await resposta.json();
+      if (idAtual !== consultaId) return;
+      const ocupados = new Set(lista.map(item => String(item.horario || "").slice(0, 5)));
+      seletor.replaceChildren();
+      let primeiroLivre = "";
+      for (const horario of horariosAtendimento) {
+        const ocupado = ocupados.has(horario);
+        const opcao = new Option(horario + (ocupado ? " — ocupado" : " — livre"), horario);
+        opcao.disabled = ocupado;
+        seletor.add(opcao);
+        if (!ocupado && !primeiroLivre) primeiroLivre = horario;
+      }
+      disponibilidadeVerificada = true;
+      if (!primeiroLivre) {
+        seletor.replaceChildren(new Option("Nenhum horário livre", ""));
+        aviso.textContent = "Não há horários livres para esse profissional nessa data.";
+        return;
+      }
+      seletor.value = primeiroLivre;
+      seletor.disabled = false;
+      const quantidade = horariosAtendimento.length - ocupados.size;
+      aviso.textContent = quantidade + (quantidade === 1 ? " horário livre. Horários ocupados estão desativados." : " horários livres. Horários ocupados estão desativados.");
+      window.liberarNovoAgendamento();
+    } catch (erro) {
+      if (idAtual !== consultaId) return;
+      console.error(erro);
+      seletor.replaceChildren(new Option("Disponibilidade indisponível", ""));
+      aviso.style.color = "#ffaaa3";
+      aviso.textContent = "Não foi possível conferir os horários. Tente novamente antes de agendar.";
+    }
+  };
+
+  campoData.addEventListener("change", window.carregarHorariosDisponiveis);
+  campoProfissional.addEventListener("change", window.carregarHorariosDisponiveis);
+  seletor.addEventListener("change", window.liberarNovoAgendamento);
+  seletor.disabled = true;
+  botao.disabled = true;
+  seletor.replaceChildren(new Option("Escolha uma data para consultar", ""));
+  aviso.textContent = "Selecione a data para ver os horários livres.";
+
+  if (baseBook) {
+    window.book = async function(){
+      const opcao = seletor.selectedOptions[0];
+      if (!disponibilidadeVerificada || !seletor.value || !opcao || opcao.disabled) {
+        document.getElementById("msg").textContent = "Consulte a disponibilidade e escolha um horário livre.";
+        return;
+      }
+      const horario = seletor.value;
+      await baseBook();
+      if (agendamentoAcabouDeSerSalvo) {
+        const salva = Array.from(seletor.options).find(item => item.value === horario);
+        if (salva) { salva.disabled = true; salva.textContent = horario + " — ocupado"; }
+      } else if (document.getElementById("msg").textContent.includes("acabou de ser reservado")) {
+        await window.carregarHorariosDisponiveis();
+      }
+    };
+  }
+})();
 </script>
 </body></html>
