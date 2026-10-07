@@ -418,9 +418,10 @@ function renderizarProximos(){
   const horariosAtendimento = Array.from({length: 36}, (_, indice) => { const minutos = 360 + indice * 30; return String(Math.floor(minutos / 60)).padStart(2, "0") + ":" + String(minutos % 60).padStart(2, "0"); });
   const campoData = document.getElementById("d");
   const campoProfissional = document.getElementById("p");
+  const campoTelefone = document.getElementById("phone");
   const seletor = document.getElementById("t");
   const botao = document.getElementById("bookBtn");
-  if (!campoData || !campoProfissional || !seletor || !botao) return;
+  if (!campoData || !campoProfissional || !campoTelefone || !seletor || !botao) return;
 
   let consultaId = 0;
   let disponibilidadeVerificada = false;
@@ -470,10 +471,10 @@ function renderizarProximos(){
     }
 
     try {
-      const resposta = await fetch(SUPABASE_URL + "/rest/v1/rpc/horarios_ocupados", {
+      const resposta = await fetch(SUPABASE_URL + "/rest/v1/rpc/horarios_ocupados_cliente", {
         method: "POST",
         headers: {"apikey": SUPABASE_KEY, "Content-Type": "application/json"},
-        body: JSON.stringify({p_data: data, p_profissional: profissional})
+        body: JSON.stringify({p_data: data, p_profissional: profissional, p_telefone: campoTelefone.value})
       });
       if (!resposta.ok) throw new Error(await resposta.text());
       const lista = await resposta.json();
@@ -515,6 +516,7 @@ function renderizarProximos(){
 
   campoData.addEventListener("change", window.carregarHorariosDisponiveis);
   campoProfissional.addEventListener("change", window.carregarHorariosDisponiveis);
+  campoTelefone.addEventListener("change", window.carregarHorariosDisponiveis);
   seletor.addEventListener("change", window.liberarNovoAgendamento);
   seletor.disabled = true;
   botao.disabled = true;
